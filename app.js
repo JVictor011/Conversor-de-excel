@@ -3,19 +3,21 @@ const Processor = require("./src/models/Processor");
 const Table = require("./src/models/Table");
 const HtmlParser = require("./src/models/HtmlParser");
 const Writer = require("./src/models/Writer");
+const PdfWriter = require("./src/models/PdfWriter");
 
-var leitor = new Reader();
-var escritor = new Writer();
+var reader = new Reader();
+var writer = new Writer();
 
 async function main() {
-  var data = await leitor.Read("./src/data/users.csv");
+  var data = await reader.Read("./src/data/users.csv");
   var dataProcess = Processor.Processs(data);
 
   var table = new Table(dataProcess);
 
   var html = await HtmlParser.Parse(table);
 
-  escritor.Write(Date.now() + ".html", html);
+  writer.Write(Date.now() + ".html", html);
+  PdfWriter.WritePDF(Date.now() + ".pdf", html);
 }
 
 main();
